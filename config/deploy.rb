@@ -1,8 +1,9 @@
-require 'bundler/capistrano'
+# require 'bundler/capistrano'
 require 'fileutils'
 
 set :application, "melvins-playground"
 set :repository,  "git@github.com:melvinsembrano/playground.git"
+set :domain, "www.melvinsplayground.com"
 
 set :scm, :git
 set :default_branch, :master
@@ -24,6 +25,18 @@ set :keep_releases, 3
 ssh_options[:paranoid] = false
 default_run_options[:pty] = true
 
+set :use_sudo, false
+
+after "deploy:create_symlink" do
+  cmd = []
+  # cmd << "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  # cmd << "ln -nfs #{shared_path}/config/ebx.yml #{release_path}/config/ebx.yml"
+  cmd << "ln -nfs #{shared_path}/bundle #{release_path}/vendor/bundle"
+
+  run cmd.join(" && ")
+end
+
+
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
@@ -32,10 +45,11 @@ default_run_options[:pty] = true
 # these http://github.com/rails/irs_process_scripts
 
 # If you are using Passenger mod_rails uncomment this:
-# namespace :deploy do
-#   task :start do ; end
-#   task :stop do ; end
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end
+
+ namespace :deploy do
+   task :start do ; end
+   task :stop do ; end
+   task :restart, :roles => :app, :except => { :no_release => true } do
+     run "touch #{File.join(current_path,'tmp','restart.txt')}"
+   end
+ end
