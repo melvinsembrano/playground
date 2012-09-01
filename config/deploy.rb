@@ -29,7 +29,7 @@ set :use_sudo, false
 
 after "deploy:create_symlink" do
   cmd = []
-  # cmd << "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  cmd << "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
   # cmd << "ln -nfs #{shared_path}/config/ebx.yml #{release_path}/config/ebx.yml"
   cmd << "ln -nfs #{shared_path}/bundle #{release_path}/vendor/bundle"
 
