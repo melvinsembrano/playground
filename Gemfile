@@ -22,6 +22,8 @@ end
 
 gem 'jquery-rails'
 
+gem 'therubyracer'
+
 group :development do
   gem 'capistrano'
 end
